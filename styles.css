@@ -1,5 +1,5 @@
 /* 
-  AI Business Academy landing page
+  JetztAberPROMPT! landing page
   Static site for GitHub Pages.
   Replace contact links and legal pages before publishing.
 */
@@ -808,4 +808,28 @@ blockquote {
   .footer-grid {
     flex-direction: column;
   }
+  .legal-page h2 {
+  margin-top: 42px;
+  margin-bottom: 14px;
+  font-size: clamp(28px, 4vw, 42px);
+  letter-spacing: -0.04em;
+}
+
+.legal-page h3 {
+  margin-top: 28px;
+  margin-bottom: 10px;
+  font-size: 22px;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+}
+
+.legal-page p {
+  margin-top: 14px;
+}
+
+.legal-page a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
 }
