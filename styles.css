@@ -671,19 +671,50 @@ blockquote {
 .footer-grid {
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
   gap: 20px;
   border-top: 1px solid var(--line);
   padding-top: 22px;
   font-size: 14px;
 }
 
-.footer-grid div {
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.footer-brand strong {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.footer-brand span {
+  color: var(--muted);
+}
+
+.footer-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.footer-meta a {
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.footer-meta a:hover {
+  color: var(--ink);
+}
+
+.footer-links {
   display: flex;
   flex-wrap: wrap;
   gap: 14px;
 }
 
-.footer-grid a:hover {
+.footer-links a:hover {
   color: var(--ink);
 }
 
