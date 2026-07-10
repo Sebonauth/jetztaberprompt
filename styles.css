@@ -132,21 +132,20 @@ li {
 .brand {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
-  font-weight: 650;
-  letter-spacing: -0.02em;
+  flex: 0 0 auto;
+  line-height: 0;
 }
 
-.brand-mark {
-  display: grid;
-  place-items: center;
-  width: 36px;
-  height: 36px;
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  background: var(--ink);
-  color: #fff;
-  font-size: 14px;
+.brand-wordmark {
+  display: block;
+  width: clamp(244px, 24vw, 304px);
+  height: auto;
+}
+
+.brand-symbol {
+  display: none;
+  width: 58px;
+  height: 58px;
 }
 
 .nav {
@@ -1372,12 +1371,15 @@ blockquote {
 .footer-brand {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  align-items: flex-start;
+  gap: 8px;
 }
 
-.footer-brand strong {
-  color: var(--ink);
-  font-weight: 700;
+.footer-brand-logo {
+  display: block;
+  width: min(232px, 64vw);
+  height: auto;
+  margin: -9px 0 -7px;
 }
 
 .footer-brand span {
@@ -1565,11 +1567,12 @@ blockquote {
     padding: 64px 0;
   }
 
-  .brand-text {
-    max-width: 180px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+  .brand-wordmark {
+    display: none;
+  }
+
+  .brand-symbol {
+    display: block;
   }
 
   .nav-toggle {

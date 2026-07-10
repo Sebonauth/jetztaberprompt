@@ -8,7 +8,9 @@ Static website for `www.jetztaberprompt.de`, hosted via GitHub Pages.
 - `kurse/*/index.html` — dedicated course pages with clean URLs
 - `styles.css` — shared responsive styling
 - `script.js` — mobile menu and reveal animation
-- `assets/favicon.svg` — favicon
+- `assets/jetztaber-wordmark.svg` — outlined desktop and footer wordmark
+- `assets/jetztaber-mark.svg` — compact mobile brand mark
+- `assets/favicon.svg` — high-contrast brand favicon
 - `assets/og-image.png` — social preview image
 - `impressum.html` — legal notice
 - `datenschutz.html` — privacy policy
