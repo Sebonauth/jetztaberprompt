@@ -1,51 +1,45 @@
-# AI Business Academy Landing Page
+# JetztAberPROMPT! Website
 
-A simple static landing page for GitHub Pages.
+Static website for `www.jetztaberprompt.de`, hosted via GitHub Pages.
 
 ## Files
 
-- `index.html` — main landing page
-- `styles.css` — full responsive styling
+- `index.html` — homepage and course overview
+- `kurse/*/index.html` — dedicated course pages with clean URLs
+- `styles.css` — shared responsive styling
 - `script.js` — mobile menu and reveal animation
-- `assets/favicon.svg` — simple favicon
-- `impressum.html` — placeholder legal page
-- `datenschutz.html` — placeholder privacy page
-- `.nojekyll` — keeps GitHub Pages from processing the site with Jekyll
+- `assets/favicon.svg` — favicon
+- `assets/og-image.png` — social preview image
+- `impressum.html` — legal notice
+- `datenschutz.html` — privacy policy
+- `sitemap.xml` — canonical URL list for search engines
+- `robots.txt` — crawler guidance and sitemap reference
+- `CNAME` — GitHub Pages custom domain
 
-## Before publishing
+## Local Preview
 
-Edit these placeholders:
+Run a local static server from the repository root:
 
-1. In `index.html`
-   - `hello@deine-domain.de`
-   - LinkedIn URL
-   - Page title / brand name, if needed
-   - Course wording and CTA labels
+```sh
+python3 -m http.server 4173 --bind 127.0.0.1
+```
 
-2. In `impressum.html`
-   - Your legal information
-
-3. In `datenschutz.html`
-   - Your privacy policy
-
-## Publish with GitHub Pages
-
-1. Create a new GitHub repository, for example `ai-business-academy`.
-2. Upload all files from this folder to the repository root.
-3. Go to **Settings → Pages**.
-4. Under **Build and deployment**, choose:
-   - Source: `Deploy from a branch`
-   - Branch: `main`
-   - Folder: `/root`
-5. Save.
-6. Your site will be available at:
-   `https://YOUR-USERNAME.github.io/ai-business-academy/`
-
-## Custom domain
-
-Add your domain in **Settings → Pages → Custom domain**.
-If you use a custom domain, you can also add a `CNAME` file to the repository root containing only your domain, for example:
+Then open:
 
 ```txt
-www.deine-domain.de
+http://127.0.0.1:4173/
+```
+
+## Before Publishing
+
+Review the legal pages, course wording, and contact links before launch. The primary contact email used by the site is:
+
+```txt
+sebastianvauth@gmail.com
+```
+
+The canonical production domain is:
+
+```txt
+https://www.jetztaberprompt.de/
 ```
