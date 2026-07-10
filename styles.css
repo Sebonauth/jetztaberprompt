@@ -313,22 +313,6 @@ h3 {
   color: var(--accent);
 }
 
-.trust-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 22px;
-}
-
-.trust-row span {
-  padding: 8px 12px;
-  border: 1px solid rgba(222, 219, 210, .85);
-  border-radius: 999px;
-  background: rgba(255,255,255,.45);
-  color: var(--muted);
-  font-size: 13px;
-}
-
 #kurse,
 #formate,
 #warum,
@@ -853,12 +837,20 @@ h3 {
   color: var(--accent);
 }
 
+.date-status.is-unavailable {
+  color: var(--muted);
+}
+
 .date-status.is-sold-out {
   color: #96382d;
 }
 
 .course-card.premium .date-status.is-available {
   color: #a7e6cc;
+}
+
+.course-card.premium .date-status.is-unavailable {
+  color: rgba(255,255,255,.58);
 }
 
 .course-card.premium .date-status.is-sold-out {
