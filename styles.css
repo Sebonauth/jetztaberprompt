@@ -1215,8 +1215,7 @@ blockquote {
 .deliverable-card,
 .info-card,
 .agenda-day,
-.course-note,
-.trainer-panel {
+.course-note {
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
   background: rgba(255,255,255,.62);
@@ -1410,34 +1409,6 @@ blockquote {
 
 .course-note p + p {
   margin-top: 14px;
-}
-
-.trainer-panel {
-  display: grid;
-  grid-template-columns: 220px minmax(0, 1fr);
-  gap: clamp(24px, 5vw, 48px);
-  align-items: center;
-  padding: clamp(24px, 5vw, 44px);
-}
-
-.trainer-panel img {
-  width: 100%;
-  aspect-ratio: 1;
-  object-fit: cover;
-  border-radius: var(--radius-md);
-  filter: saturate(.88);
-}
-
-.trainer-panel h2 {
-  margin-top: 10px;
-  font-size: clamp(36px, 4vw, 58px);
-}
-
-.trainer-panel p:not(.section-kicker) {
-  max-width: 680px;
-  margin-top: 16px;
-  color: var(--muted);
-  font-size: 18px;
 }
 
 .callout {
@@ -1939,13 +1910,8 @@ blockquote {
   }
 
   .deliverable-grid,
-  .info-grid,
-  .trainer-panel {
+  .info-grid {
     grid-template-columns: 1fr;
-  }
-
-  .trainer-panel img {
-    max-width: 220px;
   }
 
   .agenda-list li {
