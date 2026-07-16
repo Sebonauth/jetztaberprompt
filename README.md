@@ -4,8 +4,8 @@ Static website for `www.jetztaberprompt.de`, hosted via GitHub Pages.
 
 ## Files
 
-- `index.html` — homepage and course overview
-- `kurse/*/index.html` — dedicated course pages with clean URLs
+- `index.html` — homepage and program overview
+- `kurse/prompting-up-a-business/index.html` — dedicated program page with a clean URL
 - `styles.css` — shared responsive styling
 - `script.js` — mobile menu and reveal animation
 - `assets/jetztaber-wordmark.svg` — outlined desktop and footer wordmark
@@ -34,7 +34,7 @@ http://127.0.0.1:4173/
 
 ## Before Publishing
 
-Review the legal pages, course wording, and contact links before launch. The primary contact email used by the site is:
+Review the legal pages, program wording, and contact links before launch. The primary contact email used by the site is:
 
 ```txt
 sebastianvauth@gmail.com

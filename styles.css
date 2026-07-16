@@ -312,7 +312,7 @@ h3 {
   color: var(--accent);
 }
 
-#kurse,
+#programm,
 #formate,
 #warum,
 #kontakt,
@@ -541,40 +541,34 @@ h3 {
   gap: 18px;
 }
 
-.flagship-layout {
+.program-layout {
   grid-template-columns: 1fr;
 }
 
-.flagship-card {
+.course-card.program-card {
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) minmax(260px, .8fr);
   gap: 28px;
   min-height: auto;
 }
 
-.flagship-card .course-meta {
+.program-card .course-meta {
   grid-column: 1 / -1;
   margin-bottom: 0;
 }
 
-.flagship-card .outcome {
+.program-card .outcome {
   margin-top: 0;
 }
 
-.flagship-card .course-facts {
+.program-card .course-facts {
   margin-top: 0;
 }
 
-.flagship-side {
+.program-side {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  gap: 18px;
-}
-
-.module-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 18px;
 }
 
@@ -611,6 +605,10 @@ h3 {
 .course-card.premium li,
 .course-card.premium .course-subtitle,
 .course-card.premium .course-level {
+  color: rgba(255,255,255,.74);
+}
+
+.course-card.premium p:not(.course-subtitle) {
   color: rgba(255,255,255,.74);
 }
 
@@ -1741,7 +1739,6 @@ blockquote {
   }
 
   .course-grid,
-  .module-grid,
   .learning-grid,
   .path-grid,
   .format-grid,
@@ -1764,7 +1761,7 @@ blockquote {
     min-height: auto;
   }
 
-  .flagship-card {
+  .course-card.program-card {
     grid-template-columns: 1fr;
   }
 }
