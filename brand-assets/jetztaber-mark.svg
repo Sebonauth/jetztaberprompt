@@ -1,8 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
-  <title id="title">jetztaberPROMPT! symbol</title>
+  <title id="title">jetztaber>PROMPT! symbol</title>
   <desc id="desc">An orange prompt chevron followed by a bold exclamation mark.</desc>
-
-
   <polygon points="70.00,128.00 146.84,128.00 296.00,256.00 146.84,384.00 70.00,384.00 219.16,256.00" fill="#FF4F00"/>
   <path d="M350 124H420L411 306H359Z" fill="#171717"/>
   <circle cx="385" cy="369" r="35" fill="#171717"/>

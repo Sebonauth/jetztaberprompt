@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate the polished jetztaberPROMPT! vector and raster identity assets."""
+"""Generate the polished jetztaber>PROMPT! vector and raster identity assets."""
 
 from pathlib import Path
 
@@ -17,6 +17,7 @@ ORANGE = "#FF4F00"
 CHARCOAL = "#171717"
 WARM_WHITE = "#FAF7F2"
 WHITE = "#FFFFFF"
+WORDMARK_SEPARATOR_GAP = 0
 
 
 def chevron_points(x: float, cy: float, width: float, height: float):
@@ -37,14 +38,15 @@ def svg_points(points):
 
 
 def svg_shell(width, height, body, title, description, background=None):
-    bg = ""
+    elements = []
     if background:
-        bg = f'<rect width="{width}" height="{height}" fill="{background}"/>'
+        elements.append(f'  <rect width="{width}" height="{height}" fill="{background}"/>')
+    elements.append(body.strip("\n"))
+    content = "\n".join(elements)
     return f'''<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" viewBox="0 0 {width} {height}" role="img" aria-labelledby="title desc">
   <title id="title">{title}</title>
   <desc id="desc">{description}</desc>
-  {bg}
-  {body}
+{content}
 </svg>
 '''
 
@@ -59,7 +61,7 @@ def build_mark_svg(dark=False):
         512,
         512,
         body,
-        "jetztaberPROMPT! symbol",
+        "jetztaber>PROMPT! symbol",
         "An orange prompt chevron followed by a bold exclamation mark.",
         CHARCOAL if dark else None,
     )
@@ -110,11 +112,11 @@ def build_wordmark_svg(dark=False):
     baseline = 250
     left = 64
     regular_path, x = regular.shape("jetztaber", 176, left, baseline)
-    chevron_x = x + 38
+    chevron_x = x + WORDMARK_SEPARATOR_GAP
     chevron_width = 94
     chevron_height = 104
     chevron_cy = 202
-    heavy_x = chevron_x + chevron_width + 38
+    heavy_x = chevron_x + chevron_width + WORDMARK_SEPARATOR_GAP
     heavy_path, end_x = heavy.shape("PROMPT!", 184, heavy_x, baseline)
     width = int(end_x + 66)
     body = f'''
@@ -125,8 +127,8 @@ def build_wordmark_svg(dark=False):
         width,
         340,
         body,
-        "jetztaberPROMPT! wordmark",
-        "The word jetztaber in regular weight, an orange prompt chevron, and PROMPT! in heavy weight.",
+        "jetztaber>PROMPT! wordmark",
+        "The word jetztaber, an orange prompt chevron set directly between the words, and PROMPT! in heavy weight.",
         CHARCOAL if dark else None,
     ), width
 
@@ -169,10 +171,10 @@ def render_wordmark_png(width=2400, dark=False, transparent=True):
     x = 128
     draw.text((x, baseline), "jetztaber", fill=color, font=regular, anchor="ls")
     bbox = draw.textbbox((x, baseline), "jetztaber", font=regular, anchor="ls")
-    chevron_x = bbox[2] + 76
+    chevron_x = bbox[2] + WORDMARK_SEPARATOR_GAP * base_scale
     chevron = chevron_points(chevron_x, 404, 188, 208)
     draw.polygon(chevron, fill=ORANGE)
-    heavy_x = chevron_x + 188 + 76
+    heavy_x = chevron_x + 188 + WORDMARK_SEPARATOR_GAP * base_scale
     draw.text((heavy_x, baseline), "PROMPT!", fill=color, font=heavy, anchor="ls")
     right = draw.textbbox((heavy_x, baseline), "PROMPT!", font=heavy, anchor="ls")[2] + 132
     crop = canvas.crop((0, 0, right, 680))
@@ -190,7 +192,7 @@ def build_preview():
     label_font = ImageFont.truetype(str(FONT_PATH), 34, index=2)
     small_font = ImageFont.truetype(str(FONT_PATH), 26, index=7)
 
-    draw.text((120, 92), "jetztaberPROMPT! — primary identity", fill=CHARCOAL, font=label_font)
+    draw.text((120, 92), "jetztaber>PROMPT! — primary identity", fill=CHARCOAL, font=label_font)
     draw.text((120, 146), "International Orange  #FF4F00   ·   Charcoal  #171717", fill="#66615B", font=small_font)
 
     mark = render_mark_png(520, transparent=True)
