@@ -1,4 +1,4 @@
-# jetztaberPROMPT! brand assets
+# jetztaber>PROMPT! brand assets
 
 Primary palette:
 
