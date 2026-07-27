@@ -319,6 +319,8 @@ h3 {
 #fuer-wen,
 #was-du-lernst,
 #ablauf,
+#path,
+#loops,
 #nach-dem-mvp,
 #faq {
   scroll-margin-top: 96px;
@@ -507,6 +509,19 @@ h3 {
   gap: 18px;
 }
 
+.expertise-grid.seven-step-grid,
+.learning-grid.seven-step-grid {
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+
+.seven-step-grid > :nth-child(-n+4) {
+  grid-column: span 3;
+}
+
+.seven-step-grid > :nth-child(n+5) {
+  grid-column: span 4;
+}
+
 .expertise-card {
   min-height: 250px;
   padding: 24px;
@@ -533,6 +548,11 @@ h3 {
 .expertise-card p {
   margin-top: 14px;
   color: var(--muted);
+}
+
+.loop-card {
+  border-top: 3px solid var(--accent);
+  background: linear-gradient(145deg, rgba(223,242,233,.72), rgba(255,255,255,.72));
 }
 
 .course-grid {
@@ -1180,10 +1200,6 @@ blockquote {
   gap: 18px;
 }
 
-.path-grid {
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-}
-
 .learning-card {
   min-height: 260px;
   padding: 24px;
@@ -1202,6 +1218,23 @@ blockquote {
 .learning-card p {
   margin-top: 14px;
   color: var(--muted);
+}
+
+.learning-card.loop-card {
+  border-top: 3px solid var(--accent);
+  background: linear-gradient(145deg, rgba(223,242,233,.72), rgba(255,255,255,.72));
+}
+
+.learning-card strong {
+  display: block;
+  margin-top: 22px;
+  color: var(--accent-ink);
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+.loop-grid .learning-card {
+  min-height: 280px;
 }
 
 .deliverable-grid {
@@ -1252,6 +1285,10 @@ blockquote {
 .info-card p {
   margin-top: 10px;
   color: var(--muted);
+}
+
+.seven-deliverables .deliverable-card:last-child {
+  grid-column: 1 / -1;
 }
 
 .agenda-grid {
@@ -1740,7 +1777,6 @@ blockquote {
 
   .course-grid,
   .learning-grid,
-  .path-grid,
   .format-grid,
   .contact-panel,
   .about-panel,
@@ -1755,6 +1791,15 @@ blockquote {
 
   .expertise-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .expertise-grid.seven-step-grid,
+  .learning-grid.seven-step-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .seven-step-grid > :nth-child(n) {
+    grid-column: auto;
   }
 
   .course-card {
@@ -1855,6 +1900,8 @@ blockquote {
   }
 
   .expertise-grid,
+  .expertise-grid.seven-step-grid,
+  .learning-grid.seven-step-grid,
   .contact-options {
     grid-template-columns: 1fr;
   }
@@ -1909,6 +1956,10 @@ blockquote {
   .deliverable-grid,
   .info-grid {
     grid-template-columns: 1fr;
+  }
+
+  .seven-deliverables .deliverable-card:last-child {
+    grid-column: auto;
   }
 
   .agenda-list li {
