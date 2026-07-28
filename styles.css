@@ -2963,7 +2963,7 @@ textarea:focus-visible {
 }
 
 .form-grid + .form-grid,
-.field + .field {
+fieldset > .field + .field {
   margin-top: 18px;
 }
 
