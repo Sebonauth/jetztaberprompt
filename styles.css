@@ -2522,7 +2522,7 @@ textarea:focus-visible {
   width: 9px;
   height: 9px;
   border-radius: 50%;
-  background: var(--accent);
+  background: var(--focus);
   animation: availability-pulse 2s ease-out infinite;
 }
 
@@ -2538,8 +2538,8 @@ textarea:focus-visible {
 }
 
 @keyframes availability-pulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(15,107,79,.3); }
-  50% { box-shadow: 0 0 0 7px rgba(15,107,79,0); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(185,107,22,.34); }
+  50% { box-shadow: 0 0 0 7px rgba(185,107,22,0); }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -2963,7 +2963,7 @@ textarea:focus-visible {
 }
 
 .form-grid + .form-grid,
-.field + .field {
+fieldset > .field + .field {
   margin-top: 18px;
 }
 
