@@ -219,6 +219,8 @@ if (applicationForm) {
         status.hidden = false;
         status.className = 'form-status is-success';
         status.innerHTML = '<strong>Danke für deine Bewerbung.</strong><br>Als nächster Schritt folgt ein kurzes persönliches Gespräch, in dem wir dein Projekt, deine Ausgangslage und die Passung zum Programm besprechen.';
+        status.focus();
+        trackEvent('application_submit', safeEventData);
       } else {
         const labels = {
           name: 'Name',
@@ -235,17 +237,40 @@ if (applicationForm) {
           .map(([key, label]) => `${label}:\n${payload[key] || '–'}`)
           .join('\n\n');
         const subject = `Bewerbung – ${courseData.courseName || 'Prompting Up a Business'}`;
-        window.location.href = `mailto:${courseData.operatorEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        const mailtoUrl = `mailto:${courseData.operatorEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
         status.hidden = false;
         status.className = 'form-status is-success';
-        status.innerHTML = '<strong>Fast geschafft.</strong><br>Dein E-Mail-Programm wurde mit der ausgefüllten Bewerbung geöffnet. Bitte sende den Entwurf ab, damit deine Bewerbung bei Sebastian ankommt.';
+        status.replaceChildren();
+
+        const statusTitle = document.createElement('strong');
+        statusTitle.textContent = 'Deine Bewerbung ist vorbereitet.';
+
+        const statusCopy = document.createElement('p');
+        statusCopy.textContent = 'Öffne jetzt den vorausgefüllten E-Mail-Entwurf und sende ihn ab, damit deine Bewerbung bei Sebastian ankommt.';
+
+        const mailLink = document.createElement('a');
+        mailLink.className = 'button secondary form-status-action';
+        mailLink.href = mailtoUrl;
+        mailLink.textContent = 'E-Mail-Entwurf öffnen';
+        mailLink.addEventListener('click', () => trackEvent('application_email_open', safeEventData));
+
+        const fallback = document.createElement('small');
+        fallback.append('Falls sich kein E-Mail-Programm öffnet, schreibe direkt an ');
+        const emailLink = document.createElement('a');
+        emailLink.href = `mailto:${courseData.operatorEmail}`;
+        emailLink.textContent = courseData.operatorEmail;
+        fallback.append(emailLink, '.');
+
+        status.append(statusTitle, statusCopy, mailLink, fallback);
+        status.focus();
+        trackEvent('application_prepare', safeEventData);
       }
-      trackEvent('application_submit', safeEventData);
     } catch (error) {
       trackEvent('application_error', safeEventData);
       status.hidden = false;
       status.className = 'form-status is-error';
       status.textContent = 'Die Bewerbung konnte gerade nicht vorbereitet werden. Bitte versuche es erneut oder schreibe direkt an sebastianvauth@gmail.com.';
+      status.focus();
     } finally {
       submitButton.disabled = false;
       submitButton.textContent = courseData.primaryCta || 'Bewerbung absenden';
