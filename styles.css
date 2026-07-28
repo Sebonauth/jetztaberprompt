@@ -2411,7 +2411,7 @@ textarea:focus-visible {
 }
 
 .about-portrait-small {
-  justify-self: end;
+  justify-self: center;
   width: min(46%, 220px);
   margin: 0;
   aspect-ratio: 4 / 5;
