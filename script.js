@@ -176,8 +176,7 @@ if (applicationForm) {
 
   applicationForm.addEventListener('submit', async (event) => {
     event.preventDefault();
-    const fields = [...applicationForm.querySelectorAll('input, select, textarea')]
-      .filter((field) => field.name !== 'company');
+    const fields = [...applicationForm.querySelectorAll('input, select, textarea')];
     const isValid = fields.map(validateField).every(Boolean);
     const status = applicationForm.querySelector('[data-form-status]');
 
@@ -191,8 +190,6 @@ if (applicationForm) {
     }
 
     const formData = new FormData(applicationForm);
-    if (formData.get('company')) return;
-
     const cohort = siteData.cohorts.find((item) => item.id === formData.get('cohort'));
     const safeEventData = {
       cohort_id: cohort?.id,

@@ -3098,14 +3098,6 @@ fieldset > .field + .field {
   font: 14px/1.45 var(--font);
 }
 
-.honeypot {
-  position: absolute;
-  left: -10000px;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-}
-
 @media (max-width: 1040px) {
   .five-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
