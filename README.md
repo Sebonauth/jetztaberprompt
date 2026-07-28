@@ -38,7 +38,7 @@ http://127.0.0.1:4173/
 
 Edit stable program facts only in `course-data.js`. Cohort dates are stored separately in the `cohorts` array so a new cohort can be published without rewriting the course pages.
 
-The application page currently uses a privacy-preserving static-site fallback: after validation, it displays a prefilled email action that the applicant can open and send. To submit applications directly, set `applicationEndpoint` in `course-data.js` to an HTTPS endpoint that accepts JSON. The endpoint must provide its own server-side validation, spam protection, secure storage, notification workflow, retention policy, and CORS configuration before launch.
+The application page currently uses a privacy-preserving static-site fallback: after validation, it displays a prefilled email action plus a browser-independent copy option that the applicant can paste into any email program. To submit applications directly, set `applicationEndpoint` in `course-data.js` to an HTTPS endpoint that accepts JSON. The endpoint must provide its own server-side validation, spam protection, secure storage, notification workflow, retention policy, and CORS configuration before launch.
 
 The JavaScript emits privacy-safe `jap:analytics` browser events for program views, CTA clicks, application starts, email preparations, submissions, errors, and FAQ interactions. It forwards them to Plausible only when Plausible is already configured; free-text application answers are never included.
 
