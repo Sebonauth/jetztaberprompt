@@ -1,9 +1,68 @@
+const siteData = window.JetztAberPrompt || { course: {}, cohorts: [] };
+const courseData = siteData.course || {};
+
+document.querySelectorAll('[data-course-text]').forEach((element) => {
+  const key = element.dataset.courseText;
+  if (Object.prototype.hasOwnProperty.call(courseData, key)) {
+    element.textContent = String(courseData[key]);
+  }
+});
+
+document.querySelectorAll('[data-course-href]').forEach((element) => {
+  const key = element.dataset.courseHref;
+  if (courseData[key]) element.setAttribute('href', courseData[key]);
+});
+
+document.querySelectorAll('[data-cohort-summary]').forEach((element) => {
+  const cohort = siteData.cohorts.find((item) => item.status === 'open') || siteData.cohorts[0];
+  if (cohort) element.textContent = cohort.publicSummary;
+});
+
+document.querySelectorAll('[data-cohort-availability]').forEach((element) => {
+  const cohort = siteData.cohorts.find((item) => item.status === 'open') || siteData.cohorts[0];
+  if (!cohort || !Number.isInteger(cohort.seatsAvailable)) return;
+
+  const available = cohort.seatsAvailable;
+  element.dataset.availabilityState = available > 0 ? 'available' : 'sold-out';
+  if (available === 1) element.textContent = 'Noch 1 Platz verfügbar';
+  else if (available > 1) element.textContent = `Noch ${available} Plätze verfügbar`;
+  else element.textContent = 'Aktuell ausgebucht';
+});
+
+const formatCohortDate = (isoDate) => new Intl.DateTimeFormat('de-DE', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+  timeZone: 'Europe/Berlin'
+}).format(new Date(`${isoDate}T12:00:00+02:00`));
+
+document.querySelectorAll('[data-cohort-dates]').forEach((list) => {
+  const cohort = siteData.cohorts.find((item) => item.status === 'open') || siteData.cohorts[0];
+  if (!cohort?.kickoffDate || !cohort.sessionDates.length) return;
+
+  const dates = [
+    { label: 'KI-Agenten-Kickoff', date: cohort.kickoffDate },
+    ...cohort.sessionDates.map((item) => ({ label: `Termin ${item.session}`, date: item.date }))
+  ];
+
+  dates.forEach((item) => {
+    const entry = document.createElement('li');
+    const label = document.createElement('span');
+    const time = document.createElement('time');
+    label.textContent = item.label;
+    time.dateTime = item.date;
+    time.textContent = formatCohortDate(item.date);
+    entry.append(label, time);
+    list.append(entry);
+  });
+});
+
+document.querySelectorAll('[data-year]').forEach((element) => {
+  element.textContent = new Date().getFullYear();
+});
+
 const navToggle = document.querySelector('[data-nav-toggle]');
 const nav = document.querySelector('[data-nav]');
-const header = document.querySelector('[data-header]');
-const year = document.querySelector('[data-year]');
-
-if (year) year.textContent = new Date().getFullYear();
 
 if (navToggle && nav) {
   const closeNav = () => {
@@ -22,19 +81,45 @@ if (navToggle && nav) {
     navToggle.setAttribute('aria-label', isOpen ? 'Menü schließen' : 'Menü öffnen');
   });
 
-  nav.querySelectorAll('a').forEach((link) => {
-    link.addEventListener('click', () => {
-      closeNav();
-    });
-  });
-
+  nav.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeNav));
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') closeNav();
   });
 }
 
-const revealItems = document.querySelectorAll('.reveal');
+const trackEvent = (name, properties = {}) => {
+  const detail = {
+    name,
+    page: window.location.pathname,
+    ...properties
+  };
 
+  window.dispatchEvent(new CustomEvent('jap:analytics', { detail }));
+
+  if (typeof window.plausible === 'function') {
+    window.plausible(name, { props: detail });
+  }
+};
+
+document.querySelectorAll('[data-track]').forEach((element) => {
+  element.addEventListener('click', () => {
+    const openCohort = siteData.cohorts.find((item) => item.status === 'open');
+    trackEvent(element.dataset.track, {
+      cta_location: element.dataset.ctaLocation || undefined,
+      cohort_id: element.dataset.cohortId || openCohort?.id || undefined
+    });
+  });
+});
+
+document.querySelectorAll('details').forEach((details) => {
+  details.addEventListener('toggle', () => {
+    if (details.open) trackEvent('faq_open');
+  });
+});
+
+if (document.body.dataset.page === 'program') trackEvent('program_view');
+
+const revealItems = document.querySelectorAll('.reveal');
 if ('IntersectionObserver' in window) {
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
@@ -43,9 +128,127 @@ if ('IntersectionObserver' in window) {
         observer.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.12 });
-
+  }, { threshold: 0.1 });
   revealItems.forEach((item) => observer.observe(item));
 } else {
   revealItems.forEach((item) => item.classList.add('visible'));
+}
+
+const applicationForm = document.querySelector('[data-application-form]');
+
+if (applicationForm) {
+  const cohortSelect = applicationForm.querySelector('[data-cohort-select]');
+  siteData.cohorts.forEach((cohort) => {
+    const option = document.createElement('option');
+    option.value = cohort.id;
+    option.textContent = cohort.sessionDates.length
+      ? `${cohort.label} · ${cohort.dateRange}`
+      : `${cohort.label} – Termine folgen`;
+    cohortSelect.append(option);
+  });
+
+  let applicationStarted = false;
+  applicationForm.addEventListener('focusin', () => {
+    if (!applicationStarted) {
+      applicationStarted = true;
+      trackEvent('application_start');
+    }
+  });
+
+  const setFieldError = (field, message) => {
+    const error = applicationForm.querySelector(`[data-error-for="${field.name}"]`);
+    field.setAttribute('aria-invalid', message ? 'true' : 'false');
+    if (error) error.textContent = message;
+  };
+
+  const validateField = (field) => {
+    let message = '';
+    if (field.validity.valueMissing) message = 'Bitte fülle dieses Feld aus.';
+    else if (field.validity.typeMismatch) message = 'Bitte gib eine gültige E-Mail-Adresse ein.';
+    else if (field.validity.tooShort) message = `Bitte verwende mindestens ${field.minLength} Zeichen.`;
+    setFieldError(field, message);
+    return !message;
+  };
+
+  applicationForm.querySelectorAll('input, select, textarea').forEach((field) => {
+    if (field.type !== 'hidden') field.addEventListener('blur', () => validateField(field));
+  });
+
+  applicationForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const fields = [...applicationForm.querySelectorAll('input, select, textarea')]
+      .filter((field) => field.name !== 'company');
+    const isValid = fields.map(validateField).every(Boolean);
+    const status = applicationForm.querySelector('[data-form-status]');
+
+    if (!isValid) {
+      trackEvent('application_error');
+      status.hidden = false;
+      status.className = 'form-status is-error';
+      status.textContent = 'Bitte prüfe die markierten Felder.';
+      applicationForm.querySelector('[aria-invalid="true"]')?.focus();
+      return;
+    }
+
+    const formData = new FormData(applicationForm);
+    if (formData.get('company')) return;
+
+    const cohort = siteData.cohorts.find((item) => item.id === formData.get('cohort'));
+    const safeEventData = {
+      cohort_id: cohort?.id,
+      starting_point: formData.get('startingPoint')
+    };
+
+    const submitButton = applicationForm.querySelector('button[type="submit"]');
+    submitButton.disabled = true;
+    submitButton.textContent = 'Bewerbung wird vorbereitet …';
+    status.hidden = true;
+
+    const payload = Object.fromEntries(formData.entries());
+
+    try {
+      if (siteData.applicationEndpoint) {
+        const response = await fetch(siteData.applicationEndpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+          credentials: 'omit'
+        });
+        if (!response.ok) throw new Error('Application endpoint returned an error.');
+        applicationForm.reset();
+        status.hidden = false;
+        status.className = 'form-status is-success';
+        status.innerHTML = '<strong>Danke für deine Bewerbung.</strong><br>Als nächster Schritt folgt ein kurzes persönliches Gespräch, in dem wir dein Projekt, deine Ausgangslage und die Passung zum Programm besprechen.';
+      } else {
+        const labels = {
+          name: 'Name',
+          email: 'E-Mail',
+          workSituation: 'Berufliche Situation',
+          cohort: 'Gewünschte Kohorte',
+          startingPoint: 'Ausgangspunkt',
+          idea: 'Idee oder Problemfeld',
+          desiredOutcome: 'Gewünschtes Ergebnis',
+          availableTime: 'Verfügbare Zeit',
+          agentExperience: 'Erfahrung mit KI-Agenten'
+        };
+        const body = Object.entries(labels)
+          .map(([key, label]) => `${label}:\n${payload[key] || '–'}`)
+          .join('\n\n');
+        const subject = `Bewerbung – ${courseData.courseName || 'Prompting Up a Business'}`;
+        window.location.href = `mailto:${courseData.operatorEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+        status.hidden = false;
+        status.className = 'form-status is-success';
+        status.innerHTML = '<strong>Fast geschafft.</strong><br>Dein E-Mail-Programm wurde mit der ausgefüllten Bewerbung geöffnet. Bitte sende den Entwurf ab, damit deine Bewerbung bei Sebastian ankommt.';
+      }
+      trackEvent('application_submit', safeEventData);
+    } catch (error) {
+      trackEvent('application_error', safeEventData);
+      status.hidden = false;
+      status.className = 'form-status is-error';
+      status.textContent = 'Die Bewerbung konnte gerade nicht vorbereitet werden. Bitte versuche es erneut oder schreibe direkt an sebastianvauth@gmail.com.';
+    } finally {
+      submitButton.disabled = false;
+      submitButton.textContent = courseData.primaryCta || 'Bewerbung absenden';
+    }
+  });
 }
