@@ -3074,6 +3074,16 @@ textarea:focus-visible {
   color: var(--accent-ink);
 }
 
+.form-status p,
+.form-status small {
+  display: block;
+  margin-top: 8px;
+}
+
+.form-status .form-status-action {
+  margin-top: 14px;
+}
+
 .honeypot {
   position: absolute;
   left: -10000px;
