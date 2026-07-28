@@ -176,8 +176,7 @@ if (applicationForm) {
 
   applicationForm.addEventListener('submit', async (event) => {
     event.preventDefault();
-    const fields = [...applicationForm.querySelectorAll('input, select, textarea')]
-      .filter((field) => field.name !== 'company');
+    const fields = [...applicationForm.querySelectorAll('input, select, textarea')];
     const isValid = fields.map(validateField).every(Boolean);
     const status = applicationForm.querySelector('[data-form-status]');
 
@@ -191,8 +190,6 @@ if (applicationForm) {
     }
 
     const formData = new FormData(applicationForm);
-    if (formData.get('company')) return;
-
     const cohort = siteData.cohorts.find((item) => item.id === formData.get('cohort'));
     const safeEventData = {
       cohort_id: cohort?.id,
@@ -246,22 +243,54 @@ if (applicationForm) {
         statusTitle.textContent = 'Deine Bewerbung ist vorbereitet.';
 
         const statusCopy = document.createElement('p');
-        statusCopy.textContent = 'Öffne jetzt den vorausgefüllten E-Mail-Entwurf und sende ihn ab, damit deine Bewerbung bei Sebastian ankommt.';
+        statusCopy.textContent = 'Öffne den vorausgefüllten E-Mail-Entwurf oder kopiere die vollständige Bewerbung, damit du sie in deinem bevorzugten E-Mail-Programm senden kannst.';
 
         const mailLink = document.createElement('a');
         mailLink.className = 'button secondary form-status-action';
         mailLink.href = mailtoUrl;
-        mailLink.textContent = 'E-Mail-Entwurf öffnen';
+        mailLink.textContent = 'In E-Mail-App öffnen';
         mailLink.addEventListener('click', () => trackEvent('application_email_open', safeEventData));
 
+        const copyText = `An: ${courseData.operatorEmail}\nBetreff: ${subject}\n\n${body}`;
+        const copyButton = document.createElement('button');
+        copyButton.className = 'button primary form-status-action';
+        copyButton.type = 'button';
+        copyButton.textContent = 'Bewerbung kopieren';
+
+        const copyFallback = document.createElement('textarea');
+        copyFallback.className = 'form-copy-text';
+        copyFallback.value = copyText;
+        copyFallback.readOnly = true;
+        copyFallback.rows = 9;
+        copyFallback.hidden = true;
+        copyFallback.setAttribute('aria-label', 'Vorbereitete Bewerbung zum Kopieren');
+
+        copyButton.addEventListener('click', async () => {
+          try {
+            if (!navigator.clipboard?.writeText) throw new Error('Clipboard API unavailable.');
+            await navigator.clipboard.writeText(copyText);
+            copyButton.textContent = 'Bewerbung kopiert';
+            trackEvent('application_copy', safeEventData);
+          } catch (error) {
+            copyFallback.hidden = false;
+            copyFallback.focus();
+            copyFallback.select();
+            copyButton.textContent = 'Text ist markiert – jetzt kopieren';
+          }
+        });
+
+        const actionGroup = document.createElement('div');
+        actionGroup.className = 'form-status-actions';
+        actionGroup.append(copyButton, mailLink);
+
         const fallback = document.createElement('small');
-        fallback.append('Falls sich kein E-Mail-Programm öffnet, schreibe direkt an ');
+        fallback.append('Sende die Bewerbung anschließend an ');
         const emailLink = document.createElement('a');
         emailLink.href = `mailto:${courseData.operatorEmail}`;
         emailLink.textContent = courseData.operatorEmail;
         fallback.append(emailLink, '.');
 
-        status.append(statusTitle, statusCopy, mailLink, fallback);
+        status.append(statusTitle, statusCopy, actionGroup, copyFallback, fallback);
         status.focus();
         trackEvent('application_prepare', safeEventData);
       }

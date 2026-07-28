@@ -409,6 +409,10 @@ h3 {
   line-height: 1.02;
 }
 
+.hero-portrait-caption strong:only-child {
+  margin-top: 0;
+}
+
 .hero-visual::before,
 .hero-panel::before {
   content: "";
@@ -2406,6 +2410,25 @@ textarea:focus-visible {
   color: var(--muted);
 }
 
+.about-portrait-small {
+  justify-self: end;
+  width: min(46%, 220px);
+  margin: 0;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+  background: var(--ink);
+  box-shadow: 0 14px 42px rgba(36,31,21,.12);
+}
+
+.about-portrait-small img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 34%;
+}
+
 .trust-line {
   color: var(--accent-ink) !important;
   font-size: 14px !important;
@@ -3080,16 +3103,22 @@ fieldset > .field + .field {
   margin-top: 8px;
 }
 
-.form-status .form-status-action {
+.form-status-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
   margin-top: 14px;
 }
 
-.honeypot {
-  position: absolute;
-  left: -10000px;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
+.form-copy-text {
+  width: 100%;
+  margin-top: 12px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--card-solid);
+  color: var(--ink);
+  font: 14px/1.45 var(--font);
 }
 
 @media (max-width: 1040px) {
