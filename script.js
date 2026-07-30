@@ -13,10 +13,24 @@ document.querySelectorAll('[data-course-href]').forEach((element) => {
   if (courseData[key]) element.setAttribute('href', courseData[key]);
 });
 
+const openCohorts = siteData.cohorts.filter((item) => item.status === 'open');
+const displayedCohorts = openCohorts.length ? openCohorts : siteData.cohorts.slice(0, 1);
+
 document.querySelectorAll('[data-cohort-summary]').forEach((element) => {
-  const cohort = siteData.cohorts.find((item) => item.status === 'open') || siteData.cohorts[0];
-  if (cohort) element.textContent = cohort.publicSummary;
+  if (!displayedCohorts.length) return;
+  element.textContent = displayedCohorts.length === 1
+    ? displayedCohorts[0].publicSummary
+    : `Nächste Kohorten: ${displayedCohorts.map((cohort) => cohort.dateRange).join(' · ')}`;
 });
+
+const getCompactAvailability = (cohort) => {
+  const available = cohort.seatsAvailable;
+  if (available === 1) return 'noch 1 Platz';
+  if (available > 1) return `noch ${available} Plätze`;
+  return 'ausgebucht';
+};
+
+const getShortCohortLabel = (cohort) => cohort.label.replace(/-Kohorte(?: 2026)?$/, '');
 
 const setCohortAvailability = (element, cohort) => {
   if (!cohort || !Number.isInteger(cohort.seatsAvailable)) return;
@@ -29,8 +43,18 @@ const setCohortAvailability = (element, cohort) => {
 };
 
 document.querySelectorAll('[data-cohort-availability]').forEach((element) => {
-  const cohort = siteData.cohorts.find((item) => item.status === 'open') || siteData.cohorts[0];
-  setCohortAvailability(element, cohort);
+  if (displayedCohorts.length === 1) {
+    setCohortAvailability(element, displayedCohorts[0]);
+    return;
+  }
+  if (!displayedCohorts.length) return;
+
+  element.dataset.availabilityState = displayedCohorts.some((cohort) => cohort.seatsAvailable > 0)
+    ? 'available'
+    : 'sold-out';
+  element.textContent = displayedCohorts
+    .map((cohort) => `${getShortCohortLabel(cohort)}: ${getCompactAvailability(cohort)}`)
+    .join(' · ');
 });
 
 const formatCohortDate = (isoDate) => new Intl.DateTimeFormat('de-DE', {
@@ -59,11 +83,11 @@ const appendCohortDates = (list, cohort) => {
 };
 
 document.querySelectorAll('[data-cohort-schedules]').forEach((container) => {
-  const openCohorts = siteData.cohorts.filter((cohort) => (
+  const scheduledCohorts = siteData.cohorts.filter((cohort) => (
     cohort.status === 'open' && cohort.kickoffDate && cohort.sessionDates.length
   ));
 
-  openCohorts.forEach((cohort) => {
+  scheduledCohorts.forEach((cohort) => {
     const schedule = document.createElement('section');
     schedule.className = 'cohort-schedule';
 

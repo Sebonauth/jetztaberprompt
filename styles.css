@@ -2560,6 +2560,7 @@ textarea:focus-visible {
   align-items: center;
   gap: 9px;
   width: fit-content;
+  max-width: 100%;
   margin-top: 14px;
   padding: 8px 12px;
   border: 1px solid rgba(15,107,79,.2);
@@ -2569,6 +2570,7 @@ textarea:focus-visible {
   font-size: 13px;
   font-weight: 800;
   line-height: 1.2;
+  white-space: normal;
 }
 
 .availability-badge::before {
