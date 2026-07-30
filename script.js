@@ -13,24 +13,45 @@ document.querySelectorAll('[data-course-href]').forEach((element) => {
   if (courseData[key]) element.setAttribute('href', courseData[key]);
 });
 
-const openCohorts = siteData.cohorts.filter((item) => item.status === 'open');
-const displayedCohorts = openCohorts.length ? openCohorts : siteData.cohorts.slice(0, 1);
-
-document.querySelectorAll('[data-cohort-summary]').forEach((element) => {
-  if (!displayedCohorts.length) return;
-  element.textContent = displayedCohorts.length === 1
-    ? displayedCohorts[0].publicSummary
-    : `Nächste Kohorten: ${displayedCohorts.map((cohort) => cohort.dateRange).join(' · ')}`;
-});
-
-const getCompactAvailability = (cohort) => {
+const getCohortAvailability = (cohort) => {
   const available = cohort.seatsAvailable;
+  if (cohort.status !== 'open' || available < 1) return 'nicht verfügbar';
   if (available === 1) return 'noch 1 Platz';
-  if (available > 1) return `noch ${available} Plätze`;
-  return 'ausgebucht';
+  return `noch ${available} Plätze`;
 };
 
-const getShortCohortLabel = (cohort) => cohort.label.replace(/-Kohorte(?: 2026)?$/, '');
+const getCohortState = (cohort) => {
+  if (cohort.status !== 'open' || cohort.seatsAvailable < 1) return 'unavailable';
+  if (cohort.seatsAvailable <= 3) return 'limited';
+  return 'available';
+};
+
+document.querySelectorAll('[data-cohort-overview]').forEach((container) => {
+  const title = document.createElement('strong');
+  title.className = 'cohort-overview-title';
+  title.textContent = 'Nächste Kohorten:';
+
+  const list = document.createElement('ul');
+  list.className = 'cohort-overview-list';
+
+  siteData.cohorts.forEach((cohort) => {
+    if (!cohort.dateRange) return;
+    const item = document.createElement('li');
+    item.dataset.cohortState = getCohortState(cohort);
+
+    const dot = document.createElement('span');
+    dot.className = 'cohort-overview-dot';
+    dot.setAttribute('aria-hidden', 'true');
+
+    const copy = document.createElement('span');
+    copy.textContent = `${cohort.dateRange} – ${getCohortAvailability(cohort)}`;
+
+    item.append(dot, copy);
+    list.append(item);
+  });
+
+  container.replaceChildren(title, list);
+});
 
 const setCohortAvailability = (element, cohort) => {
   if (!cohort || !Number.isInteger(cohort.seatsAvailable)) return;
@@ -41,21 +62,6 @@ const setCohortAvailability = (element, cohort) => {
   else if (available > 1) element.textContent = `Noch ${available} Plätze verfügbar`;
   else element.textContent = 'Aktuell ausgebucht';
 };
-
-document.querySelectorAll('[data-cohort-availability]').forEach((element) => {
-  if (displayedCohorts.length === 1) {
-    setCohortAvailability(element, displayedCohorts[0]);
-    return;
-  }
-  if (!displayedCohorts.length) return;
-
-  element.dataset.availabilityState = displayedCohorts.some((cohort) => cohort.seatsAvailable > 0)
-    ? 'available'
-    : 'sold-out';
-  element.textContent = displayedCohorts
-    .map((cohort) => `${getShortCohortLabel(cohort)}: ${getCompactAvailability(cohort)}`)
-    .join(' · ');
-});
 
 const formatCohortDate = (isoDate) => new Intl.DateTimeFormat('de-DE', {
   day: 'numeric',
@@ -196,7 +202,7 @@ const applicationForm = document.querySelector('[data-application-form]');
 
 if (applicationForm) {
   const cohortSelect = applicationForm.querySelector('[data-cohort-select]');
-  siteData.cohorts.forEach((cohort) => {
+  siteData.cohorts.filter((cohort) => cohort.status === 'open').forEach((cohort) => {
     const option = document.createElement('option');
     option.value = cohort.id;
     option.textContent = cohort.sessionDates.length

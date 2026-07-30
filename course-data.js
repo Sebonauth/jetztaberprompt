@@ -24,10 +24,21 @@
 
   const cohorts = Object.freeze([
     Object.freeze({
+      id: 'cohort-summer-2026',
+      label: 'Juni-Kohorte 2026',
+      status: 'completed',
+      seatsAvailable: 0,
+      kickoffDate: '2026-06-15',
+      sessionDates: Object.freeze([]),
+      applicationDeadline: null,
+      dateRange: '15. Juni bis 16. Juli 2026',
+      publicSummary: 'Juni-Kohorte: 15. Juni bis 16. Juli 2026'
+    }),
+    Object.freeze({
       id: 'cohort-autumn-2026',
       label: 'September-Kohorte 2026',
       status: 'open',
-      seatsAvailable: 4,
+      seatsAvailable: 3,
       kickoffDate: '2026-09-21',
       sessionDates: Object.freeze([
         Object.freeze({ session: 1, date: '2026-09-28' }),

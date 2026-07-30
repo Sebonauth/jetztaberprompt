@@ -2553,6 +2553,57 @@ textarea:focus-visible {
   font-weight: 760;
 }
 
+.cohort-overview {
+  display: grid;
+  gap: 13px;
+  width: 100%;
+  margin-top: 18px;
+  padding: 18px 20px;
+  border: 1px solid rgba(15,107,79,.18);
+  border-radius: 18px;
+  background: rgba(223,242,233,.62);
+  color: var(--accent-ink);
+}
+
+.cohort-overview-title {
+  font-size: 16px;
+  font-weight: 850;
+}
+
+.cohort-overview-list {
+  display: grid;
+  gap: 10px;
+}
+
+.cohort-overview-list li {
+  display: grid;
+  grid-template-columns: 11px minmax(0, 1fr);
+  gap: 10px;
+  align-items: baseline;
+  font-size: 14px;
+  font-weight: 740;
+  line-height: 1.4;
+}
+
+.cohort-overview-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.cohort-overview-list li[data-cohort-state="unavailable"] .cohort-overview-dot {
+  background: #c64a3b;
+}
+
+.cohort-overview-list li[data-cohort-state="limited"] .cohort-overview-dot {
+  background: var(--focus);
+}
+
+.cohort-overview-list li[data-cohort-state="available"] .cohort-overview-dot {
+  background: var(--accent);
+}
+
 .availability-badge,
 .work-card .availability-badge,
 .contact-card .availability-badge {
