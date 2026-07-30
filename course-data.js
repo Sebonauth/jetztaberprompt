@@ -24,10 +24,21 @@
 
   const cohorts = Object.freeze([
     Object.freeze({
+      id: 'cohort-summer-2026',
+      label: 'Juni-Kohorte 2026',
+      status: 'completed',
+      seatsAvailable: 0,
+      kickoffDate: '2026-06-15',
+      sessionDates: Object.freeze([]),
+      applicationDeadline: null,
+      dateRange: '15. Juni bis 16. Juli 2026',
+      publicSummary: 'Juni-Kohorte: 15. Juni bis 16. Juli 2026'
+    }),
+    Object.freeze({
       id: 'cohort-autumn-2026',
       label: 'September-Kohorte 2026',
       status: 'open',
-      seatsAvailable: 4,
+      seatsAvailable: 3,
       kickoffDate: '2026-09-21',
       sessionDates: Object.freeze([
         Object.freeze({ session: 1, date: '2026-09-28' }),
@@ -42,6 +53,26 @@
       applicationDeadline: null,
       dateRange: '21. September bis 22. Oktober 2026',
       publicSummary: 'Nächste Kohorte: 21. September bis 22. Oktober 2026'
+    }),
+    Object.freeze({
+      id: 'cohort-winter-2026',
+      label: 'November-Kohorte 2026',
+      status: 'open',
+      seatsAvailable: 5,
+      kickoffDate: '2026-11-09',
+      sessionDates: Object.freeze([
+        Object.freeze({ session: 1, date: '2026-11-16' }),
+        Object.freeze({ session: 2, date: '2026-11-19' }),
+        Object.freeze({ session: 3, date: '2026-11-23' }),
+        Object.freeze({ session: 4, date: '2026-11-26' }),
+        Object.freeze({ session: 5, date: '2026-11-30' }),
+        Object.freeze({ session: 6, date: '2026-12-03' }),
+        Object.freeze({ session: 7, date: '2026-12-07' }),
+        Object.freeze({ session: 8, date: '2026-12-10' })
+      ]),
+      applicationDeadline: null,
+      dateRange: '9. November bis 10. Dezember 2026',
+      publicSummary: 'November-Kohorte: 9. November bis 10. Dezember 2026'
     })
   ]);
 

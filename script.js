@@ -13,21 +13,56 @@ document.querySelectorAll('[data-course-href]').forEach((element) => {
   if (courseData[key]) element.setAttribute('href', courseData[key]);
 });
 
-document.querySelectorAll('[data-cohort-summary]').forEach((element) => {
-  const cohort = siteData.cohorts.find((item) => item.status === 'open') || siteData.cohorts[0];
-  if (cohort) element.textContent = cohort.publicSummary;
+const getCohortAvailability = (cohort) => {
+  const available = cohort.seatsAvailable;
+  if (cohort.status !== 'open' || available < 1) return 'nicht verfügbar';
+  if (available === 1) return 'noch 1 Platz';
+  return `noch ${available} Plätze`;
+};
+
+const getCohortState = (cohort) => {
+  if (cohort.status !== 'open' || cohort.seatsAvailable < 1) return 'unavailable';
+  if (cohort.seatsAvailable <= 3) return 'limited';
+  return 'available';
+};
+
+document.querySelectorAll('[data-cohort-overview]').forEach((container) => {
+  const title = document.createElement('strong');
+  title.className = 'cohort-overview-title';
+  title.textContent = 'Nächste Kohorten:';
+
+  const list = document.createElement('ul');
+  list.className = 'cohort-overview-list';
+
+  siteData.cohorts.forEach((cohort) => {
+    if (!cohort.dateRange) return;
+    const item = document.createElement('li');
+    item.dataset.cohortState = getCohortState(cohort);
+
+    const dot = document.createElement('span');
+    dot.className = 'cohort-overview-dot';
+    dot.setAttribute('aria-hidden', 'true');
+
+    const copy = document.createElement('span');
+    copy.textContent = `${cohort.dateRange} – ${getCohortAvailability(cohort)}`;
+
+    item.append(dot, copy);
+    list.append(item);
+  });
+
+  container.replaceChildren(title, list);
 });
 
-document.querySelectorAll('[data-cohort-availability]').forEach((element) => {
-  const cohort = siteData.cohorts.find((item) => item.status === 'open') || siteData.cohorts[0];
+const setCohortAvailability = (element, cohort) => {
   if (!cohort || !Number.isInteger(cohort.seatsAvailable)) return;
 
   const available = cohort.seatsAvailable;
   element.dataset.availabilityState = available > 0 ? 'available' : 'sold-out';
+  element.dataset.cohortState = getCohortState(cohort);
   if (available === 1) element.textContent = 'Noch 1 Platz verfügbar';
   else if (available > 1) element.textContent = `Noch ${available} Plätze verfügbar`;
   else element.textContent = 'Aktuell ausgebucht';
-});
+};
 
 const formatCohortDate = (isoDate) => new Intl.DateTimeFormat('de-DE', {
   day: 'numeric',
@@ -36,10 +71,7 @@ const formatCohortDate = (isoDate) => new Intl.DateTimeFormat('de-DE', {
   timeZone: 'Europe/Berlin'
 }).format(new Date(`${isoDate}T12:00:00+02:00`));
 
-document.querySelectorAll('[data-cohort-dates]').forEach((list) => {
-  const cohort = siteData.cohorts.find((item) => item.status === 'open') || siteData.cohorts[0];
-  if (!cohort?.kickoffDate || !cohort.sessionDates.length) return;
-
+const appendCohortDates = (list, cohort) => {
   const dates = [
     { label: 'KI-Agenten-Kickoff', date: cohort.kickoffDate },
     ...cohort.sessionDates.map((item) => ({ label: `Termin ${item.session}`, date: item.date }))
@@ -54,6 +86,39 @@ document.querySelectorAll('[data-cohort-dates]').forEach((list) => {
     time.textContent = formatCohortDate(item.date);
     entry.append(label, time);
     list.append(entry);
+  });
+};
+
+document.querySelectorAll('[data-cohort-schedules]').forEach((container) => {
+  const scheduledCohorts = siteData.cohorts.filter((cohort) => (
+    cohort.status === 'open' && cohort.kickoffDate && cohort.sessionDates.length
+  ));
+
+  scheduledCohorts.forEach((cohort) => {
+    const schedule = document.createElement('section');
+    schedule.className = 'cohort-schedule';
+
+    const title = document.createElement('h4');
+    title.id = `${cohort.id}-schedule-title`;
+    title.textContent = cohort.label;
+    schedule.setAttribute('aria-labelledby', title.id);
+
+    const dateRange = document.createElement('p');
+    dateRange.className = 'cohort-schedule-range';
+    dateRange.textContent = cohort.dateRange;
+
+    const availability = document.createElement('p');
+    availability.className = 'availability-badge';
+    availability.setAttribute('role', 'status');
+    setCohortAvailability(availability, cohort);
+
+    const dates = document.createElement('ol');
+    dates.className = 'cohort-dates';
+    dates.setAttribute('aria-label', `Termine der ${cohort.label}`);
+    appendCohortDates(dates, cohort);
+
+    schedule.append(title, dateRange, availability, dates);
+    container.append(schedule);
   });
 });
 
@@ -138,7 +203,7 @@ const applicationForm = document.querySelector('[data-application-form]');
 
 if (applicationForm) {
   const cohortSelect = applicationForm.querySelector('[data-cohort-select]');
-  siteData.cohorts.forEach((cohort) => {
+  siteData.cohorts.filter((cohort) => cohort.status === 'open').forEach((cohort) => {
     const option = document.createElement('option');
     option.value = cohort.id;
     option.textContent = cohort.sessionDates.length
