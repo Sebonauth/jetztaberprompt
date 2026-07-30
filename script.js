@@ -58,6 +58,7 @@ const setCohortAvailability = (element, cohort) => {
 
   const available = cohort.seatsAvailable;
   element.dataset.availabilityState = available > 0 ? 'available' : 'sold-out';
+  element.dataset.cohortState = getCohortState(cohort);
   if (available === 1) element.textContent = 'Noch 1 Platz verfügbar';
   else if (available > 1) element.textContent = `Noch ${available} Plätze verfügbar`;
   else element.textContent = 'Aktuell ausgebucht';
