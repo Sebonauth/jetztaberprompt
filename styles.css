@@ -2487,6 +2487,38 @@ textarea:focus-visible {
   justify-content: flex-start;
 }
 
+.cohort-schedules {
+  display: grid;
+  width: 100%;
+  gap: 26px;
+  margin-top: 22px;
+}
+
+.cohort-schedule {
+  width: 100%;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+}
+
+.cohort-schedule h4 {
+  font-size: 21px;
+  line-height: 1.2;
+}
+
+.work-card .cohort-schedule-range {
+  margin-top: 8px;
+  color: var(--accent-ink);
+  font-weight: 760;
+}
+
+.cohort-schedule .availability-badge {
+  margin-top: 12px;
+}
+
+.cohort-schedule .cohort-dates {
+  margin-top: 16px;
+}
+
 .cohort-dates {
   display: grid;
   width: 100%;
