@@ -37,8 +37,8 @@
     Object.freeze({
       id: 'cohort-autumn-2026',
       label: 'September-Kohorte 2026',
-      status: 'open',
-      seatsAvailable: 3,
+      status: 'full',
+      seatsAvailable: 0,
       kickoffDate: '2026-09-21',
       sessionDates: Object.freeze([
         Object.freeze({ session: 1, date: '2026-09-28' }),

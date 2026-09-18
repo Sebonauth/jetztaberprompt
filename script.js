@@ -15,7 +15,7 @@ document.querySelectorAll('[data-course-href]').forEach((element) => {
 
 const getCohortAvailability = (cohort) => {
   const available = cohort.seatsAvailable;
-  if (cohort.status !== 'open' || available < 1) return 'nicht verfügbar';
+  if (cohort.status !== 'open' || available < 1) return 'voll';
   if (available === 1) return 'noch 1 Platz';
   return `noch ${available} Plätze`;
 };
@@ -61,7 +61,7 @@ const setCohortAvailability = (element, cohort) => {
   element.dataset.cohortState = getCohortState(cohort);
   if (available === 1) element.textContent = 'Noch 1 Platz verfügbar';
   else if (available > 1) element.textContent = `Noch ${available} Plätze verfügbar`;
-  else element.textContent = 'Aktuell ausgebucht';
+  else element.textContent = 'Voll';
 };
 
 const formatCohortDate = (isoDate) => new Intl.DateTimeFormat('de-DE', {
