@@ -6,6 +6,7 @@ Static website for `www.jetztaberprompt.de`, hosted via GitHub Pages.
 
 - `index.html` — homepage for the KI launch lab
 - `kurse/prompting-up-a-business/index.html` — detailed program and session curriculum
+- `kurse/lets-automate-your-job/index.html` — detailed KI workflow lab and automation curriculum
 - `bewerben/index.html` — cohort application form
 - `course-data.js` — shared course facts, cohort status, CTA labels, and application configuration
 - `styles.css` — shared responsive styling

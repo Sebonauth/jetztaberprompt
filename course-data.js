@@ -1,8 +1,8 @@
 (function () {
   const course = Object.freeze({
     courseName: 'Prompting Up a Business',
-    category: 'KI-Launch-Lab',
-    tagline: 'Baue mit KI die erste Version deines Business.',
+    category: 'Kurs zum Gründen mit KI',
+    tagline: 'Baue dir mit KI dein eigenes Business auf.',
     price: '4.990 €',
     groupSize: 5,
     kickoffHours: 2,
@@ -10,33 +10,34 @@
     hoursPerSession: 4,
     totalLiveHours: 34,
     duration: '5 Wochen',
-    format: 'Live-Online-Kohorte',
-    project: 'Eigenes Business-Projekt',
-    guidance: 'Projektarbeit und individuelle Reviews',
-    primaryCta: 'Für die nächste Kohorte bewerben',
-    secondaryCta: 'Programm ansehen',
+    format: 'Live online in einer kleinen Gruppe',
+    project: 'Dein eigenes Projekt',
+    guidance: 'Projektarbeit und persönliches Feedback',
+    primaryCta: 'Jetzt bewerben',
+    applicationCta: 'Bewerbung vorbereiten',
+    secondaryCta: 'So läuft das Programm ab',
     applicationUrl: '/bewerben/',
     programUrl: '/kurse/prompting-up-a-business/',
     operatorEmail: 'sebastianvauth@gmail.com',
-    formatSummary: '2 Stunden KI-Agenten-Kickoff plus 8 Live-Termine à 4 Stunden über 5 Wochen',
-    priceIncludes: '2 Stunden KI-Agenten-Kickoff, 8 Live-Termine à 4 Stunden, Vorlagen, Projektarbeit und individuelle Reviews'
+    formatSummary: '2 Stunden Einführung in KI-Agenten plus 8 Live-Termine à 4 Stunden über 5 Wochen',
+    priceIncludes: '2 Stunden Einführung in KI-Agenten, 8 Live-Termine à 4 Stunden, Vorlagen, Projektarbeit und persönliches Feedback'
   });
 
   const cohorts = Object.freeze([
     Object.freeze({
       id: 'cohort-summer-2026',
-      label: 'Juni-Kohorte 2026',
+      label: 'Juni-Kurs 2026',
       status: 'completed',
       seatsAvailable: 0,
       kickoffDate: '2026-06-15',
       sessionDates: Object.freeze([]),
       applicationDeadline: null,
       dateRange: '15. Juni bis 16. Juli 2026',
-      publicSummary: 'Juni-Kohorte: 15. Juni bis 16. Juli 2026'
+      publicSummary: 'Juni-Kurs: 15. Juni bis 16. Juli 2026'
     }),
     Object.freeze({
       id: 'cohort-autumn-2026',
-      label: 'September-Kohorte 2026',
+      label: 'September-Kurs 2026',
       status: 'full',
       seatsAvailable: 0,
       kickoffDate: '2026-09-21',
@@ -52,11 +53,11 @@
       ]),
       applicationDeadline: null,
       dateRange: '21. September bis 22. Oktober 2026',
-      publicSummary: 'Nächste Kohorte: 21. September bis 22. Oktober 2026'
+      publicSummary: 'Nächster Kurs: 21. September bis 22. Oktober 2026'
     }),
     Object.freeze({
       id: 'cohort-winter-2026',
-      label: 'November-Kohorte 2026',
+      label: 'November-Kurs 2026',
       status: 'open',
       seatsAvailable: 5,
       kickoffDate: '2026-11-09',
@@ -72,7 +73,7 @@
       ]),
       applicationDeadline: null,
       dateRange: '9. November bis 10. Dezember 2026',
-      publicSummary: 'November-Kohorte: 9. November bis 10. Dezember 2026'
+      publicSummary: 'November-Kurs: 9. November bis 10. Dezember 2026'
     })
   ]);
 

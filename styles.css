@@ -2830,6 +2830,10 @@ textarea:focus-visible {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
+.session-grid.two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
 .session-card {
   padding: 22px;
   border-radius: var(--radius-md);
@@ -3288,6 +3292,7 @@ fieldset > .field + .field {
   .agent-grid,
   .build-path-grid,
   .process-grid,
+  .session-grid.two,
   .session-grid.three,
   .artifact-grid,
   .kickoff-content,
