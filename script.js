@@ -29,7 +29,7 @@ const getCohortState = (cohort) => {
 document.querySelectorAll('[data-cohort-overview]').forEach((container) => {
   const title = document.createElement('strong');
   title.className = 'cohort-overview-title';
-  title.textContent = 'Nächste Kohorten:';
+  title.textContent = 'Kurstermine:';
 
   const list = document.createElement('ul');
   list.className = 'cohort-overview-list';
@@ -73,7 +73,7 @@ const formatCohortDate = (isoDate) => new Intl.DateTimeFormat('de-DE', {
 
 const appendCohortDates = (list, cohort) => {
   const dates = [
-    { label: 'KI-Agenten-Kickoff', date: cohort.kickoffDate },
+    { label: 'Einführung in KI-Agenten', date: cohort.kickoffDate },
     ...cohort.sessionDates.map((item) => ({ label: `Termin ${item.session}`, date: item.date }))
   ];
 
@@ -114,7 +114,7 @@ document.querySelectorAll('[data-cohort-schedules]').forEach((container) => {
 
     const dates = document.createElement('ol');
     dates.className = 'cohort-dates';
-    dates.setAttribute('aria-label', `Termine der ${cohort.label}`);
+    dates.setAttribute('aria-label', `Termine: ${cohort.label}`);
     appendCohortDates(dates, cohort);
 
     schedule.append(title, dateRange, availability, dates);
@@ -202,6 +202,8 @@ if ('IntersectionObserver' in window) {
 const applicationForm = document.querySelector('[data-application-form]');
 
 if (applicationForm) {
+  const applicationCta = siteData.applicationEndpoint ? 'Bewerbung absenden' : (courseData.applicationCta || 'Bewerbung vorbereiten');
+  applicationForm.querySelector('button[type="submit"]').textContent = applicationCta;
   const cohortSelect = applicationForm.querySelector('[data-cohort-select]');
   siteData.cohorts.filter((cohort) => cohort.status === 'open').forEach((cohort) => {
     const option = document.createElement('option');
@@ -280,7 +282,7 @@ if (applicationForm) {
         applicationForm.reset();
         status.hidden = false;
         status.className = 'form-status is-success';
-        status.innerHTML = '<strong>Danke für deine Bewerbung.</strong><br>Als nächster Schritt folgt ein kurzes persönliches Gespräch, in dem wir dein Projekt, deine Ausgangslage und die Passung zum Programm besprechen.';
+        status.innerHTML = '<strong>Danke für deine Bewerbung.</strong><br>Als Nächstes besprechen wir persönlich, ob der Kurs zu dir und deiner Idee passt.';
         status.focus();
         trackEvent('application_submit', safeEventData);
       } else {
@@ -288,12 +290,12 @@ if (applicationForm) {
           name: 'Name',
           email: 'E-Mail',
           workSituation: 'Berufliche Situation',
-          cohort: 'Gewünschte Kohorte',
+          cohort: 'Gewünschter Kursstart',
           startingPoint: 'Ausgangspunkt',
-          idea: 'Idee oder Problemfeld',
+          idea: 'Idee oder Problem',
           desiredOutcome: 'Gewünschtes Ergebnis',
           availableTime: 'Verfügbare Zeit',
-          agentExperience: 'Erfahrung mit KI-Agenten'
+          agentExperience: 'Erfahrung mit KI'
         };
         const body = Object.entries(labels)
           .map(([key, label]) => `${label}:\n${payload[key] || '–'}`)
@@ -308,7 +310,7 @@ if (applicationForm) {
         statusTitle.textContent = 'Deine Bewerbung ist vorbereitet.';
 
         const statusCopy = document.createElement('p');
-        statusCopy.textContent = 'Öffne den vorausgefüllten E-Mail-Entwurf oder kopiere die vollständige Bewerbung, damit du sie in deinem bevorzugten E-Mail-Programm senden kannst.';
+        statusCopy.textContent = 'Deine Bewerbung wurde noch nicht versendet. Öffne den E-Mail-Entwurf und sende ihn ab. Oder kopiere den Text in dein E-Mail-Programm.';
 
         const mailLink = document.createElement('a');
         mailLink.className = 'button secondary form-status-action';
@@ -367,7 +369,7 @@ if (applicationForm) {
       status.focus();
     } finally {
       submitButton.disabled = false;
-      submitButton.textContent = courseData.primaryCta || 'Bewerbung absenden';
+      submitButton.textContent = applicationCta;
     }
   });
 }
