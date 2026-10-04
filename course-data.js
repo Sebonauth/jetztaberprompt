@@ -3,7 +3,7 @@
     courseName: 'Prompting Up a Business',
     category: 'Kurs zum Gründen mit KI',
     tagline: 'Baue dir mit KI dein eigenes Business auf.',
-    price: '4.990 €',
+    price: '1.990 €',
     groupSize: 5,
     kickoffHours: 2,
     sessionCount: 8,
@@ -59,7 +59,7 @@
       id: 'cohort-winter-2026',
       label: 'November-Kurs 2026',
       status: 'open',
-      seatsAvailable: 5,
+      seatsAvailable: 3,
       kickoffDate: '2026-11-09',
       sessionDates: Object.freeze([
         Object.freeze({ session: 1, date: '2026-11-16' }),
